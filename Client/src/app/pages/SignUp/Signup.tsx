@@ -11,6 +11,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import logo from "@/assets/logo.png";
 import { Eye, EyeOff } from "lucide-react";
 import type { SubmitHandler } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 
 interface ProfileForm {
   name: string;
@@ -68,7 +69,7 @@ const Signup: React.FC = () => {
       name: googleUser?.given_name+" "+ googleUser?.family_name,
       email: googleUser?.email,
       profile: googleUser?.picture,
-      enrollment: googleUser?.given_name,
+      enrollment: uuidv4(),
       branch:"ET",
       admissionYear:2022,
       currentYear:4,
