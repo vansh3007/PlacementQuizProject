@@ -82,6 +82,7 @@ const QuizPage = () => {
     });
 
     setLoading(false);
+    console.log(userQuizId);
 
     if (typeof userQuizId === "string") {
       toast.success("Quiz submitted successfully.");

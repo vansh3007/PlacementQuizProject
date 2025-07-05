@@ -25,7 +25,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         await axios.post(
-          "http://localhost:5000/api/user/refresh",
+          `${import.meta.env.VITE_API_BASE_URL}/user/refresh`,
           {},
           { withCredentials: true }
         );
