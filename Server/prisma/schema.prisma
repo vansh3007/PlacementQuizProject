@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password      String
+  enrollment    String     @unique
+  profile       String
+  branch        String
+  admissionYear Int
+  currentYear   Int
+  quizzes       UserQuiz[]
+}
+
+model Admin {
+  id       String @default(uuid())
+  name     String
+  email    String @id @unique
+  password String
+}
+
+model Category {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  topic Topic[]
+}
+
+model Topic {
+  id         String     @id @default(uuid())
+  name       String
+  categoryId String
+  category   Category   @relation(fields: [categoryId], references: [id])
+  questions  Question[]
+
+  @@unique([name, categoryId])
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+  MIXED
+}
+
+model Question {
+  id                 String              @id @default(uuid())
+  question           String              @unique
+  options            Json
+  correctAns         String
+  difficulty         Difficulty
+  solution           String?             @db.LongText
+  topicId            String
+  topic              Topic               @relation(fields: [topicId], references: [id])
+  quizzes            Quiz[]
+  correctInQuizzes   CorrectQuestion[]
+  wrongInQuizzes     WrongQuestion[]
+  attemptedInQuizzes AttemptedQuestion[]
+  userAnswers        UserAnswer[]
+}
+
+model Quiz {
+  id         String   @id @default(uuid())
+  questionId String
+  userQuizId String
+  questions  Question @relation(fields: [questionId], references: [id])
+  userQuiz   UserQuiz @relation(fields: [userQuizId], references: [id])
+}
+
+model UserAnswer {
+  id         String @id @default(uuid())
+  userQuizId String
+  questionId String
+  selected   String
+  correct    String
+
+  userQuiz UserQuiz @relation(fields: [userQuizId], references: [id])
+  question Question @relation(fields: [questionId], references: [id])
+}
+
+model UserQuiz {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  category       String
+  topics         Json
+  difficulty     Difficulty
+  totalQuestions Int
+  timeLimit      Int
+  mode           String
+  // attempted      Int
+  correctCount   Int?
+  wrongCount     Int?
+  score          Float
+  timeTaken      Int?
+  createdAt      DateTime   @default(now())
+
+  quizQuestions Quiz[]
+  correct       CorrectQuestion[]
+  wrong         WrongQuestion[]
+  attempted     AttemptedQuestion[]
+  userAnswers   UserAnswer[]
+}
+
+model CorrectQuestion {
+  id         String   @id @default(uuid())
+  userQuiz   UserQuiz @relation(fields: [userQuizId], references: [id])
+  userQuizId String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+}
+
+model WrongQuestion {
+  id         String   @id @default(uuid())
+  userQuiz   UserQuiz @relation(fields: [userQuizId], references: [id])
+  userQuizId String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+}
+
+model AttemptedQuestion {
+  id         String   @id @default(uuid())
+  userQuiz   UserQuiz @relation(fields: [userQuizId], references: [id])
+  userQuizId String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+}
+
+model Jobs {
+  id             String  @id @default(uuid())
+  jobTitle       String
+  jobDescription String  @db.LongText
+  companyName    String
+  applyLink      String
+  package        String?
+  logo           String
+  location       String?
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  code      Int      @unique
+  email     String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model Branch {
+  id     String @id @default(uuid())
+  key    String
+  branch String
+}

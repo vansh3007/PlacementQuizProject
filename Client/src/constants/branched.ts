@@ -1,0 +1,18 @@
+export const branches = {
+  ET: "Electronics & Telecommunication Engineering",
+  CS: "Computer Science Engineering",
+  IT: "Information Technology Engineering",
+  CE: "Civil Engineering",
+  ME: "Mechanical Engineering",
+  EE: "Electrical Engineering",
+  CB: "Computer Science & Business Engineering",
+  IO: "Internet Of Things",
+  AI: "Artificial Intelligence",
+  DS: "Data Science",
+  EC: "Electronics Engineering",
+  CD: "Computer Science & Design",
+  MC:"Mathematics & Computing",
+  AD:"Articifial Intelligence & Data Science",
+  AR :"Artifical Intelligence & Robotics",
+  EL:"Electronics Engineering",
+};
